@@ -53,9 +53,9 @@ Write-Output $convused,$freedisk
 
 
 #os update
-$wversion = '10.0.19041'
+$updatechecker = Get-Command -Module WindowsUpdateProvider Start-WUScan -SearchCriteria "IsInstalled=0 AND IsHidden=0 AND IsAssigned=1"
 
-If ($OSINfo.Version -eq $wversion)
+If ($updatechecker)
 {
     $sortietrue = 'OS Up to date : ' + 'true' 
     Write-Output $sortietrue
@@ -72,6 +72,6 @@ $ping = 'ping :' +  $rep_time + 'ms'
 Write-Output $ping
 
 #usersname
-$USERS = Get-LocalUser | select Name
-Write-Output $USERS
+$USERS = Get-WmiObject Win32_UserAccount -Filter "LocalAccount=True" | Select-Object -ExpandProperty Name
+Write-Output 'users list : ' $USERS
 
